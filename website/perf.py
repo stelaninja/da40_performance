@@ -1,7 +1,6 @@
 # import pandas as pd
 import numpy as np
 import xarray as xr
-import os
 import json
 
 # Function to load the aircraft data from JSON-file
@@ -66,4 +65,4 @@ def get_landing_distance(pa, oat, law, ac_type):
 
 
 if __name__ == "__main__":
-    print(get_landing_distance(10000, 30))
+    print(get_landing_distance(10000, 30, 1310, "da40_ng"))

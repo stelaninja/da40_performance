@@ -29,7 +29,7 @@ def home():
         weight = 1310
 
     # Set aircraft type
-    ac_type = "da40ng"
+    ac_type = "da40_ng"
 
     # Calculate distances
     ld, gr = get_landing_distance(pa, oat, weight, ac_type)

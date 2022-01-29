@@ -1,6 +1,8 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-<h1 align="left">Calculate distances (DA40 NG)</h1>
+<h1 align="left">
+  Calculate distances ({{ ac_type.replace("_", " ").upper() }})
+</h1>
 <form method="POST" action="/">
   <br />
   <div class="container">
