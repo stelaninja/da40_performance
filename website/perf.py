@@ -1,4 +1,3 @@
-# import pandas as pd
 import numpy as np
 import xarray as xr
 import json
@@ -60,6 +59,10 @@ def get_landing_distance(pa, oat, law, ac_type):
             return f"Values outside chart range for {pa=} and {oat=}", None
         else:
             return e, None
+
+    # Check if values are outside range of chart
+    if np.isnan(land_dist) or np.isnan(ground_roll):
+        return f"Values outside chart range for {pa=} and {oat=}", None
 
     return land_dist, ground_roll
 
