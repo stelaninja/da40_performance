@@ -4,33 +4,29 @@ import xarray as xr
 import os
 import json
 
-print("CWD:", os.getcwd())
-
-AIRCRAFT = "da40ng"
-
-
+# Function to load the aircraft data from JSON-file
 def get_aircraft_data(aircraft_type):
     # Load data from file
     with open("./aircraft/da40.json", "r") as f:
         data = json.load(f)
-    # print(data["da40ng"]["ground_rolls"])
 
     ground_rolls = np.array(data[aircraft_type]["landing"]["ground_rolls"]).astype(
         float
     )
     over50 = np.array(data[aircraft_type]["landing"]["land_dists"]).astype(float)
 
+    # Replace -1 values with np.nan
     ground_rolls[ground_rolls == -1] = np.nan
     over50[over50 == -1] = np.nan
 
-    print(ground_rolls)
-
     weights = np.array(data[aircraft_type]["weights"]).astype(int)
-    print(weights)
-    # Table constants
+
+    # Table constants for OAT an PA
     oat_data = [*data[aircraft_type]["oat_range"]]
-    oat_data[1] += oat_data[2]
     pa_data = [*data[aircraft_type]["pa_range"]]
+
+    # Increase the range due to noninclusive last value
+    oat_data[1] += oat_data[2]
     pa_data[1] += pa_data[2]
 
     OAT_range = range(*oat_data)
@@ -40,8 +36,11 @@ def get_aircraft_data(aircraft_type):
 
 
 # Function to interpolate landing distance from table
-def get_landing_distance(pa, oat, law):
-    OAT_range, PA_range, ground_rolls, over50, weights = get_aircraft_data(AIRCRAFT)
+def get_landing_distance(pa, oat, law, ac_type):
+    # Get the aircraft data
+    OAT_range, PA_range, ground_rolls, over50, weights = get_aircraft_data(ac_type)
+
+    # Create the xarray tables
     land_obst = xr.DataArray(
         over50,
         dims=("LAW", "PA", "OAT"),
@@ -53,6 +52,7 @@ def get_landing_distance(pa, oat, law):
         coords={"PA": PA_range, "OAT": OAT_range, "LAW": weights},
     )
 
+    # Try to interpolate values
     try:
         land_dist = round(float(land_obst.interp(PA=pa, OAT=oat, LAW=law).values), 2)
         ground_roll = round(float(gr.interp(PA=pa, OAT=oat, LAW=law).values), 2)

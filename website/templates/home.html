@@ -1,9 +1,8 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-<h1 align="left">Calculate distances</h1>
+<h1 align="left">Calculate distances (DA40 NG)</h1>
 <form method="POST" action="/">
   <br />
-  <h2>Landing distance</h2>
   <div class="container">
     <div class="row">
       <div class="col-sm-3">
@@ -67,14 +66,17 @@
   <br />
   <div class="col-sm-12">
     <h4>
-      At the pressure altitude <b>{{ pa }}</b> ft,<br />
-      the temperature <b>{{ oat }}</b>° C and,<br />
-      the landing weight of <b>{{ weight }}</b> the distances are:
+      At the pressure altitude <b>{{ pa }}</b> ft, the temperature
+      <b>{{ oat }}</b>° C and the weight <b>{{ weight }}</b> kg, the distances
+      are:
     </h4>
   </div>
   <br />
-  Landing distance over 50 ft: {{ landing_dist }} m<br />
-  Ground roll: {{ ground_roll }} m
+  <h2>Landing distance</h2>
+  <h6>
+    Landing distance over 50 ft: <b>{{ landing_dist }} m</b><br />
+    Ground roll: <b>{{ ground_roll }} m</b>
+  </h6>
   <br />
   <br />
 
