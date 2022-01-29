@@ -10,9 +10,11 @@ def home():
     if request.method == "POST":
         pa = request.form.get("press_alt")
         oat = request.form.get("oat")
+        weight = request.form.get("weight")
         try:
             pa = int(pa)
             oat = int(oat)
+            weight = int(weight)
         except:
             pa = 0
             oat = 15
@@ -21,7 +23,16 @@ def home():
     else:
         pa = 0
         oat = 15
+        weight = 1310
 
-    ld, gr = get_landing_distance(pa, oat)
+    ld, gr = get_landing_distance(pa, oat, weight)
 
-    return render_template("home.html", pa=pa, oat=oat, landing_dist=ld, ground_roll=gr)
+    if isinstance(ld, str):
+        flash(ld, category="error")
+        pa = 0
+        oat = 15
+        # ld, gr = get_landing_distance(pa, oat)
+        ld, gr = "ERROR", "ERROR"
+    return render_template(
+        "home.html", pa=pa, oat=oat, landing_dist=ld, ground_roll=gr, weight=weight
+    )

@@ -3,9 +3,24 @@
 <h1 align="left">Calculate distances</h1>
 <form method="POST" action="/">
   <br />
-  <h6>Landing distance</h6>
+  <h2>Landing distance</h2>
   <div class="container">
     <div class="row">
+      <div class="col-sm-3">
+        <div class="form-floating">
+          <input
+            class="form-control"
+            id="weight"
+            ,
+            name="weight"
+            ,
+            placeholder="Enter pressure altitude"
+            ,
+            value="{{ weight }}"
+          />
+          <label for="press_alt" class="form-label">Weight (kg)</label>
+        </div>
+      </div>
       <div class="col-sm-3">
         <div class="form-floating">
           <input
@@ -52,8 +67,9 @@
   <br />
   <div class="col-sm-12">
     <h4>
-      At the pressure altitude <b>{{ pa }}</b> ft and the temperature
-      <b>{{ oat }}</b>° C the distances are:
+      At the pressure altitude <b>{{ pa }}</b> ft,<br />
+      the temperature <b>{{ oat }}</b>° C and,<br />
+      the landing weight of <b>{{ weight }}</b> the distances are:
     </h4>
   </div>
   <br />

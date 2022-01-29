@@ -1,69 +1,66 @@
 # import pandas as pd
 import numpy as np
 import xarray as xr
+import os
+import json
 
-# Table constants
-OAT_range = range(0, 60, 10)
-PA_range = range(0, 11000, 1000)
+print("CWD:", os.getcwd())
 
-# Da40 NG landing distance ground roll at 1310 kg
-da40_land_1310 = [
-    [305, 315, 325, 335, 355, 375],
-    [315, 325, 335, 350, 370, 395],
-    [325, 335, 350, 370, 390, 415],
-    [335, 350, 365, 385, 410, 435],
-    [350, 360, 380, 405, 430, 455],
-    [360, 375, 400, 425, 450, np.nan],
-    [375, 395, 420, 445, 475, np.nan],
-    [400, 430, 460, 485, 515, np.nan],
-    [455, 485, 520, 550, 585, np.nan],
-    [520, 555, 585, 625, 660, np.nan],
-    [580, 620, 655, 695, np.nan, np.nan],
-]
+AIRCRAFT = "da40ng"
 
-da40_land_1310 = np.array(da40_land_1310)
 
-# Da40 NG landing over 50 ft obstacle at 1310 kg
-da40_obst_1310 = [
-    [620, 650, 670, 680, 720, 760],
-    [640, 660, 680, 700, 740, 790],
-    [650, 670, 690, 730, 770, 810],
-    [670, 690, 710, 750, 800, 840],
-    [680, 700, 740, 780, 830, 870],
-    [700, 720, 770, 810, 860, np.nan],
-    [710, 750, 790, 840, 890, np.nan],
-    [750, 790, 840, 890, 940, np.nan],
-    [810, 870, 920, 970, 1020, np.nan],
-    [890, 950, 1000, 1060, 1120, np.nan],
-    [970, 1030, 1090, 1140, np.nan, np.nan],
-]
+def get_aircraft_data(aircraft_type):
+    # Load data from file
+    with open("./aircraft/da40.json", "r") as f:
+        data = json.load(f)
+    # print(data["da40ng"]["ground_rolls"])
 
-da40_obst_1310 = np.array(da40_obst_1310)
+    ground_rolls = np.array(data[aircraft_type]["landing"]["ground_rolls"]).astype(
+        float
+    )
+    over50 = np.array(data[aircraft_type]["landing"]["land_dists"]).astype(float)
+
+    ground_rolls[ground_rolls == -1] = np.nan
+    over50[over50 == -1] = np.nan
+
+    print(ground_rolls)
+
+    weights = np.array(data[aircraft_type]["weights"]).astype(int)
+    print(weights)
+    # Table constants
+    oat_data = [*data[aircraft_type]["oat_range"]]
+    oat_data[1] += oat_data[2]
+    pa_data = [*data[aircraft_type]["pa_range"]]
+    pa_data[1] += pa_data[2]
+
+    OAT_range = range(*oat_data)
+    PA_range = range(*pa_data)
+
+    return OAT_range, PA_range, ground_rolls, over50, weights
+
 
 # Function to interpolate landing distance from table
-def get_landing_distance(pa, oat):
+def get_landing_distance(pa, oat, law):
+    OAT_range, PA_range, ground_rolls, over50, weights = get_aircraft_data(AIRCRAFT)
     land_obst = xr.DataArray(
-        da40_obst_1310, dims=("PA", "OAT"), coords={"PA": PA_range, "OAT": OAT_range}
+        over50,
+        dims=("LAW", "PA", "OAT"),
+        coords={"PA": PA_range, "OAT": OAT_range, "LAW": weights},
     )
     gr = xr.DataArray(
-        da40_land_1310, dims=("PA", "OAT"), coords={"PA": PA_range, "OAT": OAT_range}
+        ground_rolls,
+        dims=("LAW", "PA", "OAT"),
+        coords={"PA": PA_range, "OAT": OAT_range, "LAW": weights},
     )
 
     try:
-        land_dist = round(int(land_obst.interp(PA=pa, OAT=oat).values))
-        ground_roll = round(int(gr.interp(PA=pa, OAT=oat).values))
+        land_dist = round(float(land_obst.interp(PA=pa, OAT=oat, LAW=law).values), 2)
+        ground_roll = round(float(gr.interp(PA=pa, OAT=oat, LAW=law).values), 2)
     except ValueError as e:
         if str(e) == "cannot convert float NaN to integer":
             return f"Values outside chart range for {pa=} and {oat=}", None
         else:
             return e, None
-
-    # ret_str = "Landing distance over 50 ft: "
-    # str_width = len(ret_str)
-    # ret_str += f"{land_dist:5,} m\n".replace(",", " ")
-    # ret_str += f"{'Ground roll: ':>{str_width}}"
-    # ret_str += f"{ground_roll:5,} m"
-    # return ret_str
 
     return land_dist, ground_roll
 
