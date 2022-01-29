@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<h1 align="left">Calculate distances</h1>
+<form method="POST" action="/">
+  <br />
+  <h6>Landing distance</h6>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="form-floating">
+          <input
+            class="form-control"
+            id="press_alt"
+            ,
+            name="press_alt"
+            ,
+            placeholder="Enter pressure altitude"
+            ,
+            value="{{ pa }}"
+          />
+          <label for="press_alt" class="form-label"
+            >Pressure Altitude (ft)</label
+          >
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-floating">
+          <input
+            class="form-control"
+            id="oat"
+            ,
+            name="oat"
+            ,
+            placeholder="Enter
+          outside air temperature"
+            ,
+            value="{{ oat }}"
+          />
+          <label for="oat" class="form-label"
+            >Outside Air Temperature (° C)</label
+          >
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-2">
+        <button type="submit" class="btn btn-primary">Calculate</button>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="col-sm-12">
+    <h4>
+      At the pressure altitude <b>{{ pa }}</b> ft and the temperature
+      <b>{{ oat }}</b>° C the distances are:
+    </h4>
+  </div>
+  <br />
+  Landing distance over 50 ft: {{ landing_dist }} m<br />
+  Ground roll: {{ ground_roll }} m
+  <br />
+  <br />
+
+  {% endblock %}
+</form>
