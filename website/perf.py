@@ -60,7 +60,7 @@ def get_distances(land_pa, to_pa, land_oat, to_oat, law, tow, ac_type):
         weights,
     ) = get_aircraft_data(ac_type)
 
-    # Check if weights are less than minimum in chart and if so set them to minimum in chart
+    # Check if weights or temperatures are less than minimum in chart and if so set them to minimum in chart
     if law < min(weights):
         law = min(weights)
     if tow < min(weights):
