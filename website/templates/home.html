@@ -140,6 +140,26 @@
     Landing distance over 50 ft: <b>{{ landing_dist }} m</b>
   </h6>
   <br />
-
-  {% endblock %}
 </form>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <div class="alert alert-warning" role="alert">
+        <center><h4>Caution!</h4></center>
+        Data used in these calculations are entered manually. It's your
+        responsibility as a pilot to check that the distances are correct. The
+        correct information is in the aircrafts official documentation.<br /><br />
+        Also these calculations do not consider wind, runway condition, pilot
+        experience or other factors.<br /><br />
+        Take off data is with flaps set to T/O, max power and a paved, dry and
+        level runway.<br />
+        Landing data is with flaps set to Landing, idle power and a paved, dry
+        and level runway.<br /><br />
+        Using weights below the minimum weights in the charts will calculate
+        using the charts minimum weights. Data outside the range of the chart
+        will generate error values.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
