@@ -65,6 +65,10 @@ def get_distances(land_pa, to_pa, land_oat, to_oat, law, tow, ac_type):
         law = min(weights)
     if tow < min(weights):
         tow = min(weights)
+    if land_oat < min(OAT_range):
+        land_oat = min(OAT_range)
+    if to_oat < min(OAT_range):
+        to_oat = min(OAT_range)
 
     # Create the xarray tables
     land_obst = xr.DataArray(
