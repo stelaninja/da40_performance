@@ -6,35 +6,36 @@
 <form method="POST" action="/">
   <br />
   <div class="container">
+    <h3>Take off</h3>
     <div class="row">
       <div class="col-sm-3">
         <div class="form-floating">
           <input
             class="form-control"
-            id="weight"
+            id="to_weight"
             ,
-            name="weight"
+            name="to_weight"
             ,
-            placeholder="Enter pressure altitude"
+            placeholder="Enter Take Off Weight"
             ,
-            value="{{ weight }}"
+            value="{{ to_weight }}"
           />
-          <label for="press_alt" class="form-label">Weight (kg)</label>
+          <label for="to_weight" class="form-label">Take Off Weight (kg)</label>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="form-floating">
           <input
             class="form-control"
-            id="press_alt"
+            id="to_press_alt"
             ,
-            name="press_alt"
+            name="to_press_alt"
             ,
-            placeholder="Enter pressure altitude"
+            placeholder="Enter Take Off Pressure Altitude"
             ,
-            value="{{ pa }}"
+            value="{{ to_pa }}"
           />
-          <label for="press_alt" class="form-label"
+          <label for="to_press_alt" class="form-label"
             >Pressure Altitude (ft)</label
           >
         </div>
@@ -43,18 +44,67 @@
         <div class="form-floating">
           <input
             class="form-control"
-            id="oat"
+            id="to_oat"
             ,
-            name="oat"
+            name="to_oat"
             ,
-            placeholder="Enter
+            placeholder="Enter Take Off Outside Air Temperature"
+            ,
+            value="{{ to_oat }}"
+          />
+          <label for="to_oat" class="form-label">Take Off OAT (° C)</label>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <h4>Landing</h4>
+      <div class="col-sm-3">
+        <div class="form-floating">
+          <input
+            class="form-control"
+            id="land_weight"
+            ,
+            name="land_weight"
+            ,
+            placeholder="Enter landing weight"
+            ,
+            value="{{ land_weight }}"
+          />
+          <label for="press_alt" class="form-label">Landing Weight (kg)</label>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-floating">
+          <input
+            class="form-control"
+            id="land_press_alt"
+            ,
+            name="land_press_alt"
+            ,
+            placeholder="Enter pressure altitude"
+            ,
+            value="{{ land_pa }}"
+          />
+          <label for="land_press_alt" class="form-label"
+            >Landing Pressure Altitude (ft)</label
+          >
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-floating">
+          <input
+            class="form-control"
+            id="land_oat"
+            ,
+            name="land_oat"
+            ,
+            placeholder="Enter landing
           outside air temperature"
             ,
-            value="{{ oat }}"
+            value="{{ land_oat }}"
           />
-          <label for="oat" class="form-label"
-            >Outside Air Temperature (° C)</label
-          >
+          <label for="land_oat" class="form-label">Landing OAT (° C)</label>
         </div>
       </div>
     </div>
@@ -66,20 +116,29 @@
     </div>
   </div>
   <br />
-  <div class="col-sm-12">
-    <h4>
-      At the pressure altitude <b>{{ pa }}</b> ft, the temperature
-      <b>{{ oat }}</b>° C and the weight <b>{{ weight }}</b> kg, the distances
-      are:
-    </h4>
-  </div>
   <br />
-  <h2>Landing distance</h2>
+  <h2>Take off distance</h2>
+  <p>
+    At the pressure altitude <b>{{ to_pa }}</b> ft, the temperature
+    <b>{{ to_oat }}</b>° C and the weight <b>{{ to_weight }}</b> kg, the take
+    off distances are:
+  </p>
   <h6>
-    Landing distance over 50 ft: <b>{{ landing_dist }} m</b><br />
-    Ground roll: <b>{{ ground_roll }} m</b>
+    Ground roll: <b>{{ togr }} m</b> <br />
+    Take off distance over 50 ft: <b>{{ tod }} m</b>
   </h6>
   <br />
+  <br />
+  <h2>Landing distance</h2>
+  <p>
+    At the pressure altitude <b>{{ land_pa }}</b> ft, the temperature
+    <b>{{ land_oat }}</b>° C and the weight <b>{{ land_weight }}</b> kg, the
+    landing distances are:
+  </p>
+  <h6>
+    Ground roll: <b>{{ land_ground_roll }} m</b> <br />
+    Landing distance over 50 ft: <b>{{ landing_dist }} m</b>
+  </h6>
   <br />
 
   {% endblock %}
